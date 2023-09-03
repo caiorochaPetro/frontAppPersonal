@@ -1,0 +1,21 @@
+.loader-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Defina a altura desejada para o círculo de carregamento */
+  }
+  
+  .loader {
+    border: 4px solid #3498db; /* Cor e espessura da borda do círculo */
+    border-top: 4px solid transparent; /* Torna a parte superior transparente para criar o círculo incompleto */
+    border-radius: 50%; /* Torna o elemento circular */
+    width: 40px; /* Largura do círculo */
+    height: 40px; /* Altura do círculo */
+    animation: spin 1s linear infinite; /* Animação de rotação */
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); } /* Ângulo inicial de rotação */
+    100% { transform: rotate(360deg); } /* Ângulo final de rotação */
+  }
+  
