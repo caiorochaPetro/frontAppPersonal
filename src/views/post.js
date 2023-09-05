@@ -46,7 +46,7 @@ export default function Posts(){
             setShort(data.getOnePost.short);
             setLink(data.getOnePost.link);
         }
-      }, [loading, error]);
+    }, [loading, error, data.getOnePost]);
       if(data && data.getOnePost){
     return(
     <Container>
