@@ -43,16 +43,19 @@ export const DELETE_POST = gql`
 
 
 export const GET_ALL_POSTS = gql`
-  query {
-    getAllPosts {
-      id
-      status
-      title
-      short
-      content
-      createdAt
-      updatedAt
-      link
+  query getAllPosts($page: Int!, $amount: Int!) {
+    getAllPosts(page: $page, amount: $amount) {
+      posts{
+        id
+        status
+        title
+        short
+        content
+        createdAt
+        updatedAt
+        link
+      }
+      total
     }
   }
 `;
@@ -77,6 +80,28 @@ export const GET_USER = gql`
   query getOneUser($input: passName){
     getOneUser(input: $input){
       token
+    }
+  }
+`;
+
+//get all Projects
+
+export const GET_PROJECTS = gql`
+  query getAllProjects{
+    getAllProjects{
+      id
+      title
+      content
+    }
+  }
+  `;
+
+export const GET_RESEARCH= gql`
+  query getResearch($key: String){
+    getResearch(key: $key){
+      title
+      id
+      link
     }
   }
 `;

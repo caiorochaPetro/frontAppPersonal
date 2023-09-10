@@ -16,21 +16,10 @@ import Login from './views/login';
 import EditPage from './views/editor';
 import ListPage from './views/listPosts';
 import Posts from './views/post';
+import Projects from './views/projects/projects';
+import Search from './views/search';
+
 import NotFound from './views/notFound';
-
-import { useContext, createContext } from 'react';
-
-export const MyContext = createContext();
-
-function MyContextProvider({ children }) {
-  const [loginData, setLoginData] = useState(undefined);
-
-  return (
-    <MyContext.Provider value={{ loginData, setLoginData }}>
-      {children}
-    </MyContext.Provider>
-  );
-}
 
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem('token'); // Recupere o token do armazenamento local
@@ -44,12 +33,12 @@ const authLink = setContext((_, { headers }) => {
 
 const httpLink = createHttpLink({
 
-  uri: 'http://localhost:4000',
+  uri: 'http://localhost:8080',
 
 });
 
 const client = new ApolloClient({
-  uri: "http://localhost:4000", // Substitua pelo seu URI GraphQL
+  uri: "http://localhost:8080", // Substitua pelo seu URI GraphQL
   cache: new InMemoryCache(),
   link: authLink.concat(httpLink),
 });
@@ -60,18 +49,19 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-    <MyContextProvider>
       <Router>
         <Routes>
             <Route path="/"  element={<App/>} />
+            <Route path="/:page"  element={<App/>} />
             <Route path='/login' element={<Login/>}/>
             <Route path="/Editor" element={<EditPage/>} />
             <Route path="/List/:urlid" element={<ListPage/>} />
-            <Route path="Post/:postid" element={<Posts/>} />
+            <Route path="/post/:postid" element={<Posts/>} />
+            <Route path="/project" element={<Projects/>} />
+            <Route path="/search/:key" element={<Search/>} />
             <Route element={<NotFound/>} />
         </Routes>
       </Router>
-      </MyContextProvider>
     </ApolloProvider>
   </React.StrictMode>
 );

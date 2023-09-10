@@ -8,16 +8,9 @@ import {GET_ONE} from '../queries/queries';
 
 import ButtonAppBar from '../comp/top';
 
-import notFOund from './notFound'
 
 import { Button, Container } from "@mui/material";
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+
 
 export default function Posts(){
     const [lid, setId] = useState(null);
@@ -46,17 +39,17 @@ export default function Posts(){
             setShort(data.getOnePost.short);
             setLink(data.getOnePost.link);
         }
-    }, [loading, error, data.getOnePost]);
+    }, [loading, error, data]);
       if(data && data.getOnePost){
     return(
     <Container>
         <ButtonAppBar></ButtonAppBar>
             <h1>{title}</h1>
-            <Button><a href={link}>Repositório</a></Button>
+            {link?<Button><a href={link}>Repositório</a></Button>:<></>}
             <div dangerouslySetInnerHTML={{ __html: content }}></div>
     </Container>
     );
 }
 else{
-    return<Container><div>{notFOund}</div></Container>
+    return<Container><div>notFOund</div></Container>
 }}

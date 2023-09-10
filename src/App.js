@@ -1,6 +1,6 @@
 import './App.css';
 import { useRef, useState, useEffect, useContext } from 'react';
-import {Box, Container, Grid, Paper, Card, Link, Select} from '@mui/material';
+import {Box, Container, Grid, Paper, Card, Link, Select, Stack, Pagination} from '@mui/material';
 
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
@@ -16,6 +16,7 @@ frrom Api the end point that are used to get all posts from ET_ALL_POSTS end poi
 */
 
 import {GET_ALL_POSTS} from './queries/queries';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export function App() {
 
@@ -31,14 +32,29 @@ export function App() {
 
 //The component to render the posts from api
 function Home(){
-    const { loading, error, data } = useQuery(GET_ALL_POSTS);
+    const localpage=1;
+    const { page } = useParams();
+    const [currentPage, setCurrentPage] = useState(page?page:localpage);
+    const amount = 5;
+
+    const navigate = useNavigate();
+    const { loading, error, data } = useQuery(GET_ALL_POSTS,{variables:{page:parseInt(currentPage), amount:parseInt(amount)}});
     const [loginData, setLoginData] = useState(null);
 
-    useEffect(()=>{
-      document.title = "IoEng"
-      
+    //page qtd
+
+
+    const handlePageChange = (event, newPage) => {
+      setCurrentPage(newPage);
+      // Atualize o estado da página atual
+      navigate("/"+newPage);
+    };
+
+    useEffect(() => {
+      document.title = "IoEng";
       setLoginData(localStorage.getItem('token'));
-    },[loginData]);
+
+    }, [loginData]);
 
     const logOut = () => {
       try{
@@ -51,14 +67,12 @@ function Home(){
     if (loading) return <p><LoadAnimated></LoadAnimated></p>;
     if (error) return <p>Erro: {error.message}</p>;
 
-
-
   if (loginData !== null){
 
   return(
     <div>
       <Button onClick={logOut}>Logout</Button>
-      {data.getAllPosts.map((cont)=>{
+      {data.getAllPosts.posts.map((cont)=>{
         return(
             <Card key={cont.id} style={cont.status=="developing"?{backgroundColor:'burlywood'}:{backgroundColor:''}}>
               <CardContent>
@@ -74,13 +88,16 @@ function Home(){
             </Card>
         );
       })}
+      <Stack>
+      <Pagination count={Math.ceil(data.getAllPosts.total/amount)} page={currentPage} onChange={handlePageChange}></Pagination>
+    </Stack>
     </div>
   );
   }
   else{
     return(
     <div>
-    {data.getAllPosts.map((cont)=>{
+    {data.getAllPosts.posts.map((cont)=>{
       return(
           <Card key={cont.id} style={cont.status=="developing"?{backgroundColor:'burlywood'}:{backgroundColor:''}}>
             <CardContent>
@@ -89,11 +106,14 @@ function Home(){
               <Typography sx={{ fontSize: 30 }} color="text.secondary" gutterBottom><a href={"/post/" + cont.id}>{cont.title}</a></Typography>
             <div dangerouslySetInnerHTML={{ __html: cont.short }}></div>
             <Typography variant="body2"> {cont.createdAt}</Typography>
-              <Button href={cont.link} variant='outlined'>SOURCE CODE</Button>
+              {cont.link?<Button href={cont.link} variant='outlined'>SOURCE CODE</Button>:<></>}
              
             </CardContent>
           </Card>
       );
     })}
+    <Stack style={{alignItems:'center', marginTop:20}}>
+      <Pagination count={Math.ceil(data.getAllPosts.total/amount)} page={currentPage} onChange={handlePageChange}></Pagination>
+    </Stack>
   </div>
   )}};

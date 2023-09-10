@@ -47,6 +47,11 @@ function Home(){
 
     const [loginData, setLoginData] = useState(null);
 
+    //response elements
+
+    const [delres, setDelres] = useState(undefined);
+    const [updateres, setUpdateres] = useState(undefined);
+
     
     useEffect(() => {
         if (!loading && !error) {
@@ -72,6 +77,9 @@ function Home(){
             variables: {
               id: idLoc
             },
+          }).then((response)=>{
+            const statusCode = response.status;
+            setDelres(statusCode);
           })
         };
 
@@ -87,6 +95,9 @@ function Home(){
                     link: link
                 } 
             },
+            }).then((response)=>{
+                const statusCode = response.status;
+                setUpdateres(statusCode);
             })
         };
 
@@ -129,6 +140,10 @@ function Home(){
                      <div dangerouslySetInnerHTML={{ __html: content }}></div>
                         <Button onClick={()=>{handleDelete(lid)}} >DELETE</Button>
                         <Button onClick={()=>{handleUpdade()}} >Update</Button>
+                        <div id="response zone">
+                            {delres!=undefined?<div>deletado!</div>:<div></div>}
+                            {updateres!=undefined?<div>atualizado!</div>:<div></div>}
+                        </div>
                         </CardContent>
                 </Card>
             </div>
