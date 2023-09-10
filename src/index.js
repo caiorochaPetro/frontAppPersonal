@@ -33,12 +33,12 @@ const authLink = setContext((_, { headers }) => {
 
 const httpLink = createHttpLink({
 
-  uri: 'http://localhost:8080',
+  uri: 'http://apipersonalapp.azurewebsites.net/graphql',
 
 });
 
 const client = new ApolloClient({
-  uri: "http://localhost:8080", // Substitua pelo seu URI GraphQL
+  uri: "http://apipersonalapp.azurewebsites.net/graphql", // Substitua pelo seu URI GraphQL
   cache: new InMemoryCache(),
   link: authLink.concat(httpLink),
 });
