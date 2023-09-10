@@ -1,0 +1,13 @@
+trigger:
+- master  # Especifique a ramificação que acionará a compilação (pode ser outra ramificação)
+
+pool:
+  vmImage: 'ubuntu-latest'  # Escolha a imagem da máquina virtual apropriada
+
+steps:
+- script: |
+    npm install  # Instala as dependências do projeto
+    npm run build  # Executa o comando de build do projeto
+  displayName: 'Instalar dependências e construir'  # Nome exibido para este passo
+
+# Adicione aqui os passos adicionais, como o armazenamento de artefatos, implantação, etc.
